@@ -28,9 +28,9 @@ def check_for_hit() -> None:
     return user_input
 
 # Tells you your hand
-def print_hand(current_hand, busted) -> None:
+def print_hand(current_hand, busted=False, dealers_score=None) -> None:
     if busted:
-        print(f"Your hand was: {current_hand}, which scored to: {sum(current_hand)}")
+        print(f"Your hand was: {current_hand}, which scored to: {sum(current_hand)}, and the dealers hand was {dealers_score}")
     else:
         print(f"Your hand is: {current_hand}, which scores to: {sum(current_hand)}")
 
@@ -43,10 +43,13 @@ def run_game() -> None:
     for i in range(2):
         hand.append(draw_card(hand))
     
+    # Gives the dealer a score and then checks against yours
+        dealers_score=random.randint(2,21)
+
     # Main game loop
     user_choice ="hit"
     while (user_choice=="hit"):
-        print_hand(hand, False)
+        print_hand(hand)
 
         # Ask the user if they want to hit or stand
         user_choice=check_for_hit()
@@ -54,7 +57,7 @@ def run_game() -> None:
             #Adds a card to the users hand
             hand.append(draw_card(hand))
 
-
+        
         # Checks if you have busted or not
         if sum(hand)>21:
             # Automatically save you when you are going to bust
@@ -64,12 +67,11 @@ def run_game() -> None:
                 print("We downgraded your ace to save you from busting.")
             else:
                 print("You bust!")
-                print_hand(hand, True)
+                print_hand(hand, True, dealers_score)
                 sys.exit(0)
 
     
-    # Gives the dealer a score and then checks against yours
-    dealers_score=random.randint(2,21)
+   
     print(f"The dealers score was: {dealers_score}")
     if dealers_score>sum(hand):
         print("You lost!")
